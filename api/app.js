@@ -1,42 +1,21 @@
-var express = require('express'),
-    path = require('path'),
-    bodyParser = require('body-parser'),
-    cons = require('consolidate'),
-    dust = require('dustjs-helpers'),
-    pg = require('pg'),
-    app = express();
+const express = require('express');
+const path = require('path');
+const app = express();
+const port = 3000;
 
-
-// DB connect String
-var connect = "postgres://postgres:123456@localhost/DB1";
-
-
-// Assign Dust Engine to .dust Files
-app.engine('dust', cons.dust);
-
-
-//Set Default Ext .dust
-app.set('view engine','dust');
-app.set('views', __dirname + '/views');
-
-
-//Set public Folder
-app.use(express.static(path.join(__dirname, 'public')));
-
-
-//Body Parser Middleware
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false}));
-
-
-app.get('/',function(req, res){
-  res.render('index');
+app.get('/api/data', (req, res) => {
+  res.json([1, 2, 3]);
 });
 
+// Note: L'endpoint '/data' est maintenant dans le fichier components/app.js
 
-//Server
-app.listen(3001,function(){
-  console.log('Server Started on port 3001');
-})
+app.get('/', (req, res) => {
+  res.send('Hello, world!');
+});
 
+// Servir les fichiers statiques de l'application React
+app.use(express.static(path.join(__dirname, 'components/build')));
 
+app.listen(port, () => {
+  console.log(`App listening  on port ${port}`);
+});
